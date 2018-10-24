@@ -60,17 +60,18 @@ public class Package {
 			return false;
 		if(isToken(content))
 			return true;
-		if(!content.startsWith(dataPackageBeginning()))
-			return false;
-		String[] fields = fields(content);
-		if(fields.length != 5 || !validErrorControl(fields[0]) || !validDataType(fields[3]))
+		if(!content.startsWith(dataPackageBeginning()) || !validFields(fields(content)))
 			return false;
 		return true;
 	}
 	
+	private boolean validFields(String[] fields) {
+		return fields.length == 5 && validErrorControl(fields[0]) && !Constants.BROADCAST_ID.equals(fields[1])
+				&& !Constants.BROADCAST_ID.equals(fields[2]) && validDataType(fields[3]);
+	}
+	
 	private boolean validErrorControl(String errorControl) {
 		return Constants.NOT_COPIED.equals(errorControl) ||
-				Constants.NOT_COPIED_2.equals(errorControl) ||
 				Constants.ERROR.equals(errorControl) ||
 				Constants.OK.equals(errorControl);
 	}
@@ -87,5 +88,11 @@ public class Package {
 	public boolean isToken() {
 		return Constants.TOKEN.equals(content);
 	}
+	
+	public Optional<String> getErrorControl() { return errorControl; }
+	public Optional<String> getSourceNickname() { return sourceNickname; }
+	public Optional<String> getDestinationNickname() { return destinationNickname; }
+	public Optional<String> getDataType() { return dataType; }
+	public Optional<String> getMessage() { return message; }
 	
 }
