@@ -3,9 +3,9 @@ package model;
 import java.util.Optional;
 
 import constant.Constants;
-import exception.InvalidPackageException;
+import exception.InvalidPacketException;
 
-public class Package {
+public class Packet {
 	
 	private String content;
 	private Optional<String> errorControl;
@@ -14,23 +14,23 @@ public class Package {
 	private Optional<String> dataType;
 	private Optional<String> message;
 	
-	public Package(String content) throws InvalidPackageException {
-		validatePackage(content);
+	public Packet(String content) throws InvalidPacketException {
+		validatePacket(content);
 	}
 	
-	private void validatePackage(String content) throws InvalidPackageException {
+	private void validatePacket(String content) throws InvalidPacketException {
 		if(content == null)
-			throw new InvalidPackageException("The content of the package cannot be null");
-		if(!validPackage(content))
-			throw new InvalidPackageException("Invalid format! Should be:\n" + Constants.DATA_PACKAGE_FORMAT);
+			throw new InvalidPacketException("The content of the packet cannot be null");
+		if(!validPacket(content))
+			throw new InvalidPacketException("Invalid format! Should be:\n" + Constants.DATA_PACKET_FORMAT);
 		this.content = content;
 		if(isToken())
 			initializeToken();
 		else
-			initializeDataPackage();
+			initializeDataPacket();
 	}
 	
-	private void initializeDataPackage() {
+	private void initializeDataPacket() {
 		String[] fields = fields(content);
 		errorControl = Optional.ofNullable(fields[0]);
 		sourceNickname = Optional.ofNullable(fields[1]);
@@ -47,20 +47,20 @@ public class Package {
 		message = Optional.empty();
 	}
 	
-	private String dataPackageBeginning() {
-		return Constants.DATA_PACKAGE_ID + ";";
+	private String dataPacketBeginning() {
+		return Constants.DATA_PACKET_ID + ";";
 	}
 	
 	private String[] fields(String content) {
-		return content.substring(dataPackageBeginning().length()).split(":");
+		return content.substring(dataPacketBeginning().length()).split(":");
 	}
 	
-	private boolean validPackage(String content) {
+	private boolean validPacket(String content) {
 		if(content == null)
 			return false;
 		if(isToken(content))
 			return true;
-		if(!content.startsWith(dataPackageBeginning()) || !validFields(fields(content)))
+		if(!content.startsWith(dataPacketBeginning()) || !validFields(fields(content)))
 			return false;
 		return true;
 	}
