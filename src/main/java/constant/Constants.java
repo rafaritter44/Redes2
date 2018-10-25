@@ -17,4 +17,12 @@ public class Constants {
 	public static final String DATA_PACKAGE_FORMAT = DATA_PACKAGE_ID +
 			";<error_control>:<source_nickname>:<destination_nickname>:<data_type>:<message_or_file_data>";
 	
+	public static final long CONFIGURATION_LINES = 4L;
+	
+	public static final String CONFIGURATION_FORMAT =
+			"<next_ip>:<next_port>\n"
+			+ "<nickname> (of current machine)\n"
+			+ "<sleep_duration>\n"
+			+ "<token_generator> (true or false)";
+	
 }

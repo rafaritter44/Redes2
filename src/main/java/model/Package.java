@@ -22,7 +22,7 @@ public class Package {
 		if(content == null)
 			throw new InvalidPackageException("The content of the package cannot be null");
 		if(!validPackage(content))
-			throw new InvalidPackageException("Invalid format! Should be: " + Constants.DATA_PACKAGE_FORMAT);
+			throw new InvalidPackageException("Invalid format! Should be:\n" + Constants.DATA_PACKAGE_FORMAT);
 		this.content = content;
 		if(isToken())
 			initializeToken();

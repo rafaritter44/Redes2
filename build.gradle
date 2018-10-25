@@ -1,9 +1,13 @@
 apply plugin: 'java'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+	compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
 }
