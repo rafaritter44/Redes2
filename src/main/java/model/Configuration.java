@@ -16,7 +16,7 @@ import exception.InvalidConfigurationException;
 public class Configuration {
 	
 	private String nextIP;
-	private String nextPort;
+	private int nextPort;
 	private String nickname;
 	private long sleepDuration;
 	private boolean tokenGenerator;
@@ -43,7 +43,7 @@ public class Configuration {
 	private void initializeConfiguration(List<String> lines) {
 		String[] address = lines.get(0).split(":");
 		nextIP = address[0];
-		nextPort = address[1];
+		nextPort = Integer.parseInt(address[1]);
 		nickname = lines.get(1);
 		sleepDuration = Long.parseLong(lines.get(2));
 		tokenGenerator = Boolean.parseBoolean(lines.get(3));
@@ -62,7 +62,7 @@ public class Configuration {
 	}
 	
 	public String getNextIP() { return nextIP; }
-	public String getNextPort() { return nextPort; }
+	public int getNextPort() { return nextPort; }
 	public String getNickname() { return nickname; }
 	public long getSleepDuration() { return sleepDuration; }
 	public boolean isTokenGenerator() { return tokenGenerator; }

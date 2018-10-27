@@ -10,10 +10,18 @@ import model.Packet;
 
 public class PacketQueue {
 	
+	private static class QueueHolder {
+		static final PacketQueue INSTANCE = new PacketQueue();
+	}
+	
 	private List<Packet> queue;
 
-	public PacketQueue() {
+	private PacketQueue() {
 		queue = Collections.synchronizedList(new LinkedList<>());
+	}
+	
+	public static PacketQueue getInstance() {
+		return QueueHolder.INSTANCE;
 	}
 	
 	public boolean isEmpty() { return queue.isEmpty(); }

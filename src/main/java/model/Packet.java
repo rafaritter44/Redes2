@@ -22,7 +22,7 @@ public class Packet {
 		if(content == null)
 			throw new InvalidPacketException("The content of the packet cannot be null");
 		if(!validPacket(content))
-			throw new InvalidPacketException("Invalid format! Should be:\n" + Constants.DATA_PACKET_FORMAT);
+			throw new InvalidPacketException("This packet is invalid:\n" + content + "\nCorrect format:\n" + Constants.DATA_PACKET_FORMAT);
 		this.content = content;
 		if(isToken())
 			initializeToken();
@@ -89,6 +89,7 @@ public class Packet {
 		return Constants.TOKEN.equals(content);
 	}
 	
+	public String getContent() { return content; }
 	public Optional<String> getErrorControl() { return errorControl; }
 	public Optional<String> getSourceNickname() { return sourceNickname; }
 	public Optional<String> getDestinationNickname() { return destinationNickname; }

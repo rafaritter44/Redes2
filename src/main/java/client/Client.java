@@ -14,7 +14,7 @@ public class Client implements Runnable {
 	
 	@Override
 	public void run() {
-		//TODO
+		//TODO cannot send token packets
 	}
 	
 }

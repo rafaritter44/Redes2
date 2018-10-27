@@ -2,6 +2,9 @@ package constant;
 
 public class Constants {
 	
+	public static final int PORT = 8080;
+	public static final int PACKET_SIZE = 1024;
+	
 	public static final String TOKEN = "1234";
 	public static final String DATA_PACKET_ID = "2345";
 	
@@ -16,6 +19,8 @@ public class Constants {
 	
 	public static final String DATA_PACKET_FORMAT = DATA_PACKET_ID +
 			";<error_control>:<source_nickname>:<destination_nickname>:<data_type>:<message_or_file_data>";
+	
+	public static final String CLIENT_PACKET_FORMAT = "<destination_nickname> <data_type> <message_or_file_data>";
 	
 	public static final long CONFIGURATION_LINES = 4L;
 	
