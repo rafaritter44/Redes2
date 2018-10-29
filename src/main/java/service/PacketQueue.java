@@ -1,6 +1,5 @@
 package service;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class PacketQueue {
 	private List<Packet> queue;
 
 	private PacketQueue() {
-		queue = Collections.synchronizedList(new LinkedList<>());
+		queue = new LinkedList<>();
 	}
 	
 	public static PacketQueue getInstance() {
@@ -26,11 +25,14 @@ public class PacketQueue {
 	
 	public boolean isEmpty() { return queue.isEmpty(); }
 	
-	public synchronized void add(Packet packet) throws FullQueueException {
+	public void add(Packet packet) throws FullQueueException {
 		if(queue.size() == Constants.QUEUE_LIMIT)
-			throw new FullQueueException("Can't add any more packets. Maximum capacity: " + Constants.QUEUE_LIMIT);
+			throw new FullQueueException("Failed to add " + packet.getContent() +
+					"\nCan't add any more packets. Maximum capacity: " + Constants.QUEUE_LIMIT);
 		queue.add(packet);
 	}
+	
+	public Packet poll() { return queue.remove(0); }
 	
 	public Packet replaceFirst(Packet packet) {
 		return queue.set(0, packet);

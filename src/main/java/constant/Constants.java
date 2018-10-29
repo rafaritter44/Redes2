@@ -4,6 +4,9 @@ public class Constants {
 	
 	public static final int PORT = 8080;
 	public static final int PACKET_SIZE = 1024;
+	public static final int ERROR_PROBABILITY = 25;
+	public static final String DEFAULT_FILE_NAME = "file";
+	public static final String DEFAULT_FILE_EXTENSION = ".txt";
 	
 	public static final String TOKEN = "1234";
 	public static final String DATA_PACKET_ID = "2345";
