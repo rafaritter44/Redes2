@@ -14,17 +14,17 @@ public class ClientPacket {
 	
 	public String getContent() {
 		return Constants.DATA_PACKET_ID + ";" + Constants.NOT_COPIED + ":" +
-				Server.getInstance().getConfig().getNickname() + ":" + input.replace(' ', ':');
+				Server.getInstance().getConfig().getNickname() + ":" + input;
 	}
 	
 	private void validatePacket(String input) throws InvalidPacketException {
-		if(!validFields(input.split(" ")))
+		if(!validFields(input.split(":")))
 			throw new InvalidPacketException("This packet is invalid:\n" + input + "\nCorrect format:\n" + Constants.CLIENT_PACKET_FORMAT);
 		this.input = input;
 	}
 	
 	private boolean validFields(String[] fields) {
-		return fields.length == 3 && validDataType(fields[0]);
+		return fields.length == 3 && validDataType(fields[1]);
 	}
 	
 	private boolean validDataType(String dataType) {

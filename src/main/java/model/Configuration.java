@@ -53,7 +53,7 @@ public class Configuration {
 		if(lines.size() != Constants.CONFIGURATION_LINES)
 			return false;
 		String[] address = lines.get(0).split(":");
-		return address.length == 2 && validator.isValid(address[0]) && StringUtils.isNumeric(address[0]) &&
+		return address.length == 2 && validator.isValid(address[0]) && StringUtils.isNumeric(address[1]) &&
 				!Constants.BROADCAST_ID.equals(lines.get(1)) && StringUtils.isNumeric(lines.get(2)) && isBoolean(lines.get(3));
 	}
 	

@@ -66,8 +66,8 @@ public class Packet {
 	}
 	
 	private boolean validFields(String[] fields) {
-		return fields.length == 5 && validErrorControl(fields[0]) && !Constants.BROADCAST_ID.equals(fields[1])
-				&& !Constants.BROADCAST_ID.equals(fields[2]) && validDataType(fields[3]);
+		return fields.length == 5 && validErrorControl(fields[0]) &&
+				!Constants.BROADCAST_ID.equals(fields[1]) && validDataType(fields[3]);
 	}
 	
 	private boolean validErrorControl(String errorControl) {

@@ -20,10 +20,10 @@ public class Constants {
 	
 	public static final String BROADCAST_ID = "TODOS";
 	
-	public static final String DATA_PACKET_FORMAT = DATA_PACKET_ID +
-			";<error_control>:<source_nickname>:<destination_nickname>:<data_type>:<message_or_file_data>";
+	public static final String CLIENT_PACKET_FORMAT = "<destination_nickname>:<data_type>:<message_or_file_data>";
 	
-	public static final String CLIENT_PACKET_FORMAT = "<destination_nickname> <data_type> <message_or_file_data>";
+	public static final String DATA_PACKET_FORMAT = DATA_PACKET_ID +
+			";<error_control>:<source_nickname>:" + CLIENT_PACKET_FORMAT;
 	
 	public static final long CONFIGURATION_LINES = 4L;
 	
