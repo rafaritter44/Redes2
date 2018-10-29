@@ -108,4 +108,8 @@ public class Packet {
 		return this;
 	}
 	
+	public static Packet generateToken() throws InvalidPacketException {
+		return new Packet(Constants.TOKEN);
+	}
+	
 }

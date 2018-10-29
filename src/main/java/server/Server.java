@@ -47,6 +47,8 @@ public class Server implements Runnable {
 	@Override
 	public void run() {
 		try(DatagramSocket socket = new DatagramSocket(Constants.PORT)) {
+			if(config.isTokenGenerator())
+				socket.send(datagramTokenPacket());
 			byte[] data = new byte[Constants.PACKET_SIZE];
 			while(true) {
 				DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
@@ -129,6 +131,10 @@ public class Server implements Runnable {
 		} catch(Exception exception) {
 			exception.printStackTrace();
 		}
+	}
+	
+	private DatagramPacket datagramTokenPacket() throws Exception {
+		return createDatagramPacket(Packet.generateToken());
 	}
 	
 }
