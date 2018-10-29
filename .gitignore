@@ -4,4 +4,4 @@ bin/
 .classpath
 .project
 build/
-.DS_Store
+**.DS_Store
