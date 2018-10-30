@@ -98,13 +98,13 @@ public class Packet {
 	
 	public Packet readMessage() {
 		errorControl = Optional.ofNullable(Constants.OK);
-		content.replaceFirst(Constants.NOT_COPIED, Constants.OK);
+		content = content.replaceFirst(Constants.NOT_COPIED, Constants.OK);
 		return this;
 	}
 	
 	public Packet introduceError() {
 		errorControl = Optional.ofNullable(Constants.ERROR);
-		content.replaceFirst(Constants.NOT_COPIED, Constants.ERROR);
+		content = content.replaceFirst(Constants.NOT_COPIED, Constants.ERROR);
 		return this;
 	}
 	

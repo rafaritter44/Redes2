@@ -47,15 +47,18 @@ public class Server implements Runnable {
 	@Override
 	public void run() {
 		try(DatagramSocket socket = new DatagramSocket(Constants.PORT)) {
-			if(config.isTokenGenerator())
+			sleep();
+			if(config.isTokenGenerator()) {
+				System.out.println(Messages.generateToken(config));
 				socket.send(datagramTokenPacket());
+			}
 			byte[] data = new byte[Constants.PACKET_SIZE];
 			while(true) {
 				DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
 				socket.receive(datagramPacket);
 				Packet packet;
 				try {
-					packet = new Packet(new String(datagramPacket.getData()));
+					packet = new Packet(new String(datagramPacket.getData()).trim());
 				} catch(InvalidPacketException exception) {
 					System.out.println(exception.getMessage());
 					continue;
@@ -63,12 +66,15 @@ public class Server implements Runnable {
 				if(InetAddress.getLocalHost().equals(datagramPacket.getAddress())) {
 					try {
 						queue.add(packet);
+						System.out.println(Messages.addToQueue(packet));
 					} catch(FullQueueException exception) {
 						System.out.println(exception.getMessage());
 					}
 					continue;
 				}
+				sleep();
 				if(packet.isToken()) {
+					System.out.println(Messages.RECEIVE_TOKEN);
 					datagramPacket = createDatagramPacket(queue.isEmpty()? packet: queue.replaceFirst(packet));
 				} else if(packet.getSourceNickname().get().equals(config.getNickname())) {
 					switch(packet.getErrorControl().get()) {
@@ -109,6 +115,7 @@ public class Server implements Runnable {
 				} else {
 					System.out.println(Messages.notForMe(packet));
 				}
+				System.out.println(Messages.send(datagramPacket, config));
 				socket.send(datagramPacket);
 			}
 		} catch(Exception exception) {
@@ -135,6 +142,10 @@ public class Server implements Runnable {
 	
 	private DatagramPacket datagramTokenPacket() throws Exception {
 		return createDatagramPacket(Packet.generateToken());
+	}
+	
+	private void sleep() throws InterruptedException {
+		Thread.sleep(1000L * config.getSleepDuration());
 	}
 	
 }
