@@ -41,7 +41,7 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
-		try(DatagramSocket socket = new DatagramSocket()) {
+		try(DatagramSocket socket = new DatagramSocket(Constants.CLIENT_PORT)) {
 			while(true) {
 				ClientPacket packet;
 				try {
@@ -53,7 +53,7 @@ public class Client implements Runnable {
 				String content = packet.getContent();
 				messagesWithError.put(content, false);
 				byte[] data = content.getBytes();
-				DatagramPacket datagramPacket = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.PORT);
+				DatagramPacket datagramPacket = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.SERVER_PORT);
 				socket.send(datagramPacket);
 			}
 		} catch(Exception exception) {

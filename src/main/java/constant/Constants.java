@@ -2,7 +2,8 @@ package constant;
 
 public class Constants {
 	
-	public static final int PORT = 8080;
+	public static final int SERVER_PORT = 8080;
+	public static final int CLIENT_PORT = 8888;
 	public static final int PACKET_SIZE = 1024;
 	public static final int ERROR_PROBABILITY = 25;
 	public static final String DEFAULT_FILE_NAME = "file";

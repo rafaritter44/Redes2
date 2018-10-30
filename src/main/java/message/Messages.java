@@ -48,16 +48,16 @@ public class Messages {
 	}
 	
 	public static String generateToken(Configuration config) {
-		return "Generated token and sent it to " + config.getNextIP();
+		return "Generated token and sent it to " + config.getNextIP() + ":" + config.getNextPort();
 	}
 	
 	public static String addToQueue(Packet packet) {
-		return "Added this packet " + packet.getContent() + " to queue";
+		return "Added this packet \"" + packet.getContent() + "\" to queue";
 	}
 	
 	public static String send(DatagramPacket datagramPacket, Configuration config) {
-		return "Sending " + new String(datagramPacket.getData()).trim() +
-				" to " + config.getNextIP() + ":" + config.getNextPort();
+		return "Sending \"" + new String(datagramPacket.getData()).trim() +
+				"\" to " + config.getNextIP() + ":" + config.getNextPort();
 	}
 
 }

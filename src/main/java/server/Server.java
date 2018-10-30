@@ -46,7 +46,7 @@ public class Server implements Runnable {
 
 	@Override
 	public void run() {
-		try(DatagramSocket socket = new DatagramSocket(Constants.PORT)) {
+		try(DatagramSocket socket = new DatagramSocket(Constants.SERVER_PORT)) {
 			sleep();
 			if(config.isTokenGenerator()) {
 				System.out.println(Messages.generateToken(config));
@@ -63,7 +63,7 @@ public class Server implements Runnable {
 					System.out.println(exception.getMessage());
 					continue;
 				}
-				if(InetAddress.getLocalHost().equals(datagramPacket.getAddress())) {
+				if(isFromClient(datagramPacket)) {
 					try {
 						queue.add(packet);
 						System.out.println(Messages.addToQueue(packet));
@@ -146,6 +146,11 @@ public class Server implements Runnable {
 	
 	private void sleep() throws InterruptedException {
 		Thread.sleep(1000L * config.getSleepDuration());
+	}
+	
+	private boolean isFromClient(DatagramPacket datagramPacket) throws UnknownHostException {
+		return InetAddress.getLocalHost().equals(datagramPacket.getAddress())
+				&& Constants.CLIENT_PORT == datagramPacket.getPort();
 	}
 	
 }
