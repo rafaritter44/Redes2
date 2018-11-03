@@ -1,4 +1,4 @@
-package client;
+package com.github.rafaritter44.redes.t2.client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import constant.Constants;
-import exception.InvalidPacketException;
-import model.ClientPacket;
+import com.github.rafaritter44.redes.t2.constant.Constants;
+import com.github.rafaritter44.redes.t2.exception.InvalidPacketException;
+import com.github.rafaritter44.redes.t2.model.ClientPacket;
 
 public class Client implements Runnable {
 
@@ -31,12 +31,12 @@ public class Client implements Runnable {
 		return ClientHolder.INSTANCE;
 	}
 	
-	public void updateMessageWithError(String content) {
-		messagesWithError.put(content, true);
+	public void updateMessageWithError(String input) {
+		messagesWithError.put(input, true);
 	}
 	
-	public boolean isMessageWithError(String content) {
-		return messagesWithError.get(content);
+	public boolean isMessageWithError(String input) {
+		return messagesWithError.get(input);
 	}
 
 	@Override
@@ -50,9 +50,8 @@ public class Client implements Runnable {
 					System.out.println(exception.getMessage());
 					continue;
 				}
-				String content = packet.getContent();
-				messagesWithError.put(content, false);
-				byte[] data = content.getBytes();
+				messagesWithError.put(packet.getInput(), false);
+				byte[] data = packet.getContent().getBytes();
 				DatagramPacket datagramPacket = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), Constants.SERVER_PORT);
 				socket.send(datagramPacket);
 			}

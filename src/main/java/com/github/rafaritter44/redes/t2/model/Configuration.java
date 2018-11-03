@@ -1,4 +1,4 @@
-package model;
+package com.github.rafaritter44.redes.t2.model;
 
 import static java.util.stream.Collectors.toList;
 
@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
-import constant.Constants;
-import exception.InvalidConfigurationException;
+import com.github.rafaritter44.redes.t2.constant.Constants;
+import com.github.rafaritter44.redes.t2.exception.InvalidConfigurationException;
 
 public class Configuration {
 	

@@ -1,4 +1,4 @@
-package server;
+package com.github.rafaritter44.redes.t2.server;
 
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
@@ -6,15 +6,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
-import client.Client;
-import constant.Constants;
-import exception.FullQueueException;
-import exception.InvalidPacketException;
-import message.Messages;
-import model.Configuration;
-import model.Packet;
-import service.PacketQueue;
+import com.github.rafaritter44.redes.t2.client.Client;
+import com.github.rafaritter44.redes.t2.constant.Constants;
+import com.github.rafaritter44.redes.t2.exception.FullQueueException;
+import com.github.rafaritter44.redes.t2.exception.InvalidPacketException;
+import com.github.rafaritter44.redes.t2.message.Messages;
+import com.github.rafaritter44.redes.t2.model.Configuration;
+import com.github.rafaritter44.redes.t2.model.Packet;
+import com.github.rafaritter44.redes.t2.service.PacketQueue;
 
 public class Server implements Runnable {
 	
@@ -47,8 +48,8 @@ public class Server implements Runnable {
 	@Override
 	public void run() {
 		try(DatagramSocket socket = new DatagramSocket(Constants.SERVER_PORT)) {
-			sleep();
 			if(config.isTokenGenerator()) {
+				sleep();
 				System.out.println(Messages.generateToken(config));
 				socket.send(datagramTokenPacket());
 			}
@@ -56,9 +57,11 @@ public class Server implements Runnable {
 			while(true) {
 				DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
 				socket.receive(datagramPacket);
+				trimDatagramPacket(datagramPacket);
+				System.out.println(Messages.receiveData(datagramPacket));
 				Packet packet;
 				try {
-					packet = new Packet(new String(datagramPacket.getData()).trim());
+					packet = new Packet(new String(datagramPacket.getData()));
 				} catch(InvalidPacketException exception) {
 					System.out.println(exception.getMessage());
 					continue;
@@ -74,7 +77,6 @@ public class Server implements Runnable {
 				}
 				sleep();
 				if(packet.isToken()) {
-					System.out.println(Messages.RECEIVE_TOKEN);
 					datagramPacket = createDatagramPacket(queue.isEmpty()? packet: queue.replaceFirst(packet));
 				} else if(packet.getSourceNickname().get().equals(config.getNickname())) {
 					switch(packet.getErrorControl().get()) {
@@ -91,19 +93,21 @@ public class Server implements Runnable {
 						break;
 					case Constants.ERROR:
 						Client client = Client.getInstance();
-						boolean secondError = client.isMessageWithError(packet.getContent());
+						boolean secondError = client.isMessageWithError(packet.getClientInput());
 						System.out.println(Messages.error(packet, secondError));
 						if(secondError)
 							datagramPacket = createDatagramPacket(queue.poll());
 						else {
-							datagramPacket = createDatagramPacket(queue.replaceFirst(packet));
-							client.updateMessageWithError(packet.getContent());
+							datagramPacket = createDatagramPacket(queue.replaceFirst(packet.renew()));
+							client.updateMessageWithError(packet.getClientInput());
 						}
 					}
 				} else if(packet.getDestinationNickname().get().equals(config.getNickname())) {
 					System.out.println(Messages.receive(packet));
-					if(error())
+					if(error()) {
+						System.out.println(Messages.introduceError(packet));
 						datagramPacket = createDatagramPacket(packet.introduceError());
+					}
 					else
 						datagramPacket = createDatagramPacket(packet.readMessage());
 					if(packet.getDataType().get().equals(Constants.FILE_ID))
@@ -115,8 +119,8 @@ public class Server implements Runnable {
 				} else {
 					System.out.println(Messages.notForMe(packet));
 				}
-				System.out.println(Messages.send(datagramPacket, config));
 				socket.send(datagramPacket);
+				System.out.println(Messages.send(datagramPacket, config));
 			}
 		} catch(Exception exception) {
 			exception.printStackTrace();
@@ -133,8 +137,10 @@ public class Server implements Runnable {
 	}
 	
 	private void saveFile(Packet packet) {
-		try(PrintWriter writer = new PrintWriter(Constants.DEFAULT_FILE_NAME + fileCount++ + Constants.DEFAULT_FILE_EXTENSION)) {
+		final String file = Constants.DEFAULT_FILE_NAME + fileCount++ + Constants.DEFAULT_FILE_EXTENSION;
+		try(PrintWriter writer = new PrintWriter(file)) {
 			writer.println(packet.getContent());
+			System.out.println(Messages.saveFile(file, packet));
 		} catch(Exception exception) {
 			exception.printStackTrace();
 		}
@@ -145,12 +151,21 @@ public class Server implements Runnable {
 	}
 	
 	private void sleep() throws InterruptedException {
-		Thread.sleep(1000L * config.getSleepDuration());
+		System.out.println(Messages.sleep(config.getSleepDuration()));
+		for(long i=config.getSleepDuration(); i>0L; i--) {
+			System.out.print(i + "...");
+			TimeUnit.SECONDS.sleep(1L);
+		}
+		System.out.println(0);
 	}
 	
-	private boolean isFromClient(DatagramPacket datagramPacket) throws UnknownHostException {
+	public boolean isFromClient(DatagramPacket datagramPacket) throws UnknownHostException {
 		return InetAddress.getLocalHost().equals(datagramPacket.getAddress())
 				&& Constants.CLIENT_PORT == datagramPacket.getPort();
+	}
+	
+	private void trimDatagramPacket(DatagramPacket datagramPacket) {
+		datagramPacket.setData(new String(datagramPacket.getData(), 0, datagramPacket.getLength()).trim().getBytes());
 	}
 	
 }

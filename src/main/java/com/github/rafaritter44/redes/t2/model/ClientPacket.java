@@ -1,8 +1,8 @@
-package model;
+package com.github.rafaritter44.redes.t2.model;
 
-import constant.Constants;
-import exception.InvalidPacketException;
-import server.Server;
+import com.github.rafaritter44.redes.t2.constant.Constants;
+import com.github.rafaritter44.redes.t2.exception.InvalidPacketException;
+import com.github.rafaritter44.redes.t2.server.Server;
 
 public class ClientPacket {
 	
@@ -11,6 +11,8 @@ public class ClientPacket {
 	public ClientPacket(String input) throws InvalidPacketException {
 		validatePacket(input);
 	}
+	
+	public String getInput() { return input; }
 	
 	public String getContent() {
 		return Constants.DATA_PACKET_ID + ";" + Constants.NOT_COPIED + ":" +

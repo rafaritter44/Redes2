@@ -1,4 +1,4 @@
-package constant;
+package com.github.rafaritter44.redes.t2.constant;
 
 public class Constants {
 	

@@ -1,9 +1,9 @@
-package model;
+package com.github.rafaritter44.redes.t2.model;
 
 import java.util.Optional;
 
-import constant.Constants;
-import exception.InvalidPacketException;
+import com.github.rafaritter44.redes.t2.constant.Constants;
+import com.github.rafaritter44.redes.t2.exception.InvalidPacketException;
 
 public class Packet {
 	
@@ -96,6 +96,10 @@ public class Packet {
 	public Optional<String> getDataType() { return dataType; }
 	public Optional<String> getMessage() { return message; }
 	
+	public String getClientInput() {
+		return destinationNickname.get() + ":" + dataType.get() + ":" + message.get();
+	}
+	
 	public Packet readMessage() {
 		errorControl = Optional.ofNullable(Constants.OK);
 		content = content.replaceFirst(Constants.NOT_COPIED, Constants.OK);
@@ -105,6 +109,12 @@ public class Packet {
 	public Packet introduceError() {
 		errorControl = Optional.ofNullable(Constants.ERROR);
 		content = content.replaceFirst(Constants.NOT_COPIED, Constants.ERROR);
+		return this;
+	}
+	
+	public Packet renew() {
+		errorControl = Optional.ofNullable(Constants.NOT_COPIED);
+		content = content.replaceFirst(Constants.ERROR, Constants.NOT_COPIED);
 		return this;
 	}
 	

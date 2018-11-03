@@ -1,9 +1,9 @@
-package app;
+package com.github.rafaritter44.redes.t2;
 
-import client.Client;
-import exception.InvalidConfigurationException;
-import model.Configuration;
-import server.Server;
+import com.github.rafaritter44.redes.t2.client.Client;
+import com.github.rafaritter44.redes.t2.exception.InvalidConfigurationException;
+import com.github.rafaritter44.redes.t2.model.Configuration;
+import com.github.rafaritter44.redes.t2.server.Server;
 
 public class Main {
 
