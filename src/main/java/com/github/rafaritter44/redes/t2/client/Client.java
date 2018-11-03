@@ -13,8 +13,14 @@ import com.github.rafaritter44.redes.t2.constant.Constants;
 import com.github.rafaritter44.redes.t2.exception.InvalidPacketException;
 import com.github.rafaritter44.redes.t2.model.ClientPacket;
 
+/*
+ * Classe que representa o cliente
+ */
 public class Client implements Runnable {
 
+	/*
+	 * Holder do Singleton de Client
+	 */
 	private static class ClientHolder {
 		static final Client INSTANCE = new Client();
 	}
@@ -22,23 +28,41 @@ public class Client implements Runnable {
 	private Map<String, Boolean> messagesWithError;
 	private BufferedReader reader;
 
+	/*
+	 * Construtor, que inicializa um dicionário que mapeia cada mensagem enviada pelo
+	 * cliente para um booleano que informa se o pacote foi recebido com erro ou não;
+	 * Também inicializa um BufferedReader para ler as mensagens escritas pelo teclado
+	 */
 	private Client() {
 		messagesWithError = Collections.synchronizedMap(new HashMap<>());
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
+	/*
+	 * Método estático que retorna o Singleton de Client
+	 */
 	public static Client getInstance() {
 		return ClientHolder.INSTANCE;
 	}
 	
+	/*
+	 * Método que atualiza a mensagem especificada, informando que ela foi recebida com erro
+	 */
 	public void updateMessageWithError(String input) {
 		messagesWithError.put(input, true);
 	}
 	
+	/*
+	 * Método que informa se a mensagem especificada foi recebida com erro ou não
+	 */
 	public boolean isMessageWithError(String input) {
 		return messagesWithError.get(input);
 	}
 
+	/*
+	 * Trecho assíncrono do cliente, que cria um Cliente UDP e recebe continuamente as entradas do
+	 * teclado, validando-as, adicionando-as ao dicionário de controle de erro, e enviando-as ao servidor
+	 */
 	@Override
 	public void run() {
 		try(DatagramSocket socket = new DatagramSocket(Constants.CLIENT_PORT)) {
