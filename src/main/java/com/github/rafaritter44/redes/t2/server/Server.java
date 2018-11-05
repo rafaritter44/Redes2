@@ -228,8 +228,17 @@ public class Server implements Runnable {
 	 * Método que verifica se o "DatagramPacket" passado por parâmetro foi enviado pelo cliente ou não
 	 */
 	public boolean isFromClient(DatagramPacket datagramPacket) throws UnknownHostException {
-		return InetAddress.getLocalHost().equals(datagramPacket.getAddress())
+		return parseAddress(InetAddress.getLocalHost()).equals(parseAddress(datagramPacket.getAddress()))
 				&& Constants.CLIENT_PORT == datagramPacket.getPort();
+	}
+	
+	/*
+	 * Método que padroniza a apresentação visual (em String) dos endereços, permitindo a comparação entre eles
+	 */
+	private String parseAddress(InetAddress inetAddress) {
+		String slash = "/";
+		String address = slash + inetAddress.toString();
+		return address.substring(address.lastIndexOf(slash));
 	}
 	
 	/*
